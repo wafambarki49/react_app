@@ -14,7 +14,6 @@ componentDidMount() {
   fetch('https://jsonplaceholder.typicode.com/comments'+'?postId='+id)
       .then(response => response.json())
       .then(comment => {
-        console.log(comment) 
                this.setState({ comment })
     });
   }
@@ -26,8 +25,8 @@ return  (
         {this.state.comment.map(hit =>
           <li key={hit.id}>
             
-            <p> {hit.email}</p>
-            <p> {hit.body}</p>
+            <p className="text-info">Email <span className="text-muted">{hit.email}</span></p>
+            <p className="text-warning"> {hit.body}</p>
           </li>
         )}
       </ul>

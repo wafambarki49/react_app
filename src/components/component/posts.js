@@ -21,7 +21,9 @@ class Posts extends Component {
     console.log(this.id);
     fetch('https://jsonplaceholder.typicode.com/posts' + '/' + id)
       .then(response => response.json())
-      .then(data => this.setState({ data }));
+      .then(data => {
+        this.setState({ data })
+      });
   }
 
   render() {
@@ -29,9 +31,9 @@ class Posts extends Component {
     return (
       <div>
 
-        <h1>{this.state.data.name}</h1>
-        <p>{this.state.data.body}</p>
-        <button onClick={this.navigateToComments.bind(this)}>Show Comments</button>
+        <h1 className="text-success">{this.state.data.title}</h1>
+        <p className="text-info">{this.state.data.body}</p>
+        <button className="btn btn-primary" onClick={this.navigateToComments.bind(this)}>Show Comments</button>
       </div>
 
 
