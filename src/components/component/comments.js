@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {ListGroup,ListGroupItem,ListGroupItemHeading,ListGroupItemText} from 'reactstrap';
 class Comments extends Component {
 
 
@@ -41,21 +42,18 @@ class Comments extends Component {
 
     if (this.state.loading === false && this.state.err === false) {
       commentsView = this.state.comment.map(hit =>
-        <li key={hit.id}>
-          <p className="text-info">Email <span className="text-muted">{hit.email}</span></p>
-          <p className="text-warning"> {hit.body}</p>
-        </li>
+        <ListGroupItem  key={hit.id}>
+          <ListGroupItemHeading className="text-info">Email <span className="text-muted">{hit.email}</span></ListGroupItemHeading>
+          <ListGroupItemText className="text-warning"> {hit.body}</ListGroupItemText>
+        </ListGroupItem>
       )
     }
 
 
     return (
-      <div>
-        <ul>
+      <ListGroup>
           {commentsView}
-        </ul>
-
-      </div>
+      </ListGroup>
 
 
     );

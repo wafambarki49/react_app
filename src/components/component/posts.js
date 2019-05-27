@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'reactstrap';
 class Posts extends Component {
 
 
@@ -19,10 +20,10 @@ class Posts extends Component {
 
   componentDidMount() {
     const id = Math.floor(Math.random() * 100) + 1;
-    fetch('https://jsonplaceholder.typicode.com/post/' + id)
+    fetch('https://jsonplaceholder.typicode.com/posts/' + id)
       .then(response => {
         if (!response.ok) {
-          throw Error(response.statusText);
+          throw Error(response.statusText); 
         }
         return response.json();
       })
@@ -37,7 +38,7 @@ class Posts extends Component {
     let postView = <p>please wait while loading....</p>
 
     if (this.state.err) {
-      postView = <p>Something Went Wrong</p>
+      postView = <p className="text-warning">Something Went Wrong</p>
     }
 
     if (!this.state.loading && !this.state.err) {
@@ -45,7 +46,8 @@ class Posts extends Component {
         <div>
           <h1 className="text-success">{this.state.data.title}</h1>
           <p className="text-info">{this.state.data.body}</p>
-          <button className="btn btn-primary" onClick={this.navigateToComments.bind(this)}>Show Comments</button>
+          <Button color="primary" onClick={this.navigateToComments.bind(this)}>Show Comments</Button>
+          
         </div>
     }
 
