@@ -1,8 +1,10 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
+import AppContext from '../../context/context';
 import {ListGroup,ListGroupItem,ListGroupItemHeading,ListGroupItemText} from 'reactstrap';
+
 const Comments = (props) =>  {
 
-  const [comments,setComments] = useState([]);
+  const {state,dispatch} = useContext(AppContext);
   const [err,setErr] = useState(false);
   const [loading,setLoading] = useState(true);
 
@@ -16,7 +18,7 @@ const Comments = (props) =>  {
         return response.json();
       })
       .then(comment => {
-        setComments(comment)
+        dispatch({type:"GET_COMMENTS",payload: comment})
         setErr(false)
         setLoading(false)
       })
@@ -39,7 +41,7 @@ const Comments = (props) =>  {
 
 
     if (!loading && !err ) {
-      commentsView = comments.map(hit =>
+      commentsView = state.comments.map(hit =>
         <ListGroupItem  key={hit.id}>
           <ListGroupItemHeading className="text-info">Email <span className="text-muted">{hit.email}</span></ListGroupItemHeading>
           <ListGroupItemText className="text-warning"> {hit.body}</ListGroupItemText>

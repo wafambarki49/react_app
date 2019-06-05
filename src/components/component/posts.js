@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Button } from 'reactstrap';
+import AppContext from '../../context/context';
 const Posts = (props) => {
 
-  const [data, setData] = useState({});
+  const {state,dispatch} = useContext(AppContext);
   const [loading, setLoading] = useState(true);
   const [err, setError] = useState(false);
 
@@ -16,7 +17,7 @@ const Posts = (props) => {
         return response.json();
       })
       .then(data => {
-        setData(data);
+        dispatch({type:"GET_POST",payload: data})
         setError(false);
         setLoading(false);
       })
@@ -24,7 +25,7 @@ const Posts = (props) => {
   }
 
   const navigateToComments = () => {
-    const id = data.id;
+    const id = state.post.id;
     props.history.push('/' + id + '/comments')
   }
 
@@ -43,8 +44,8 @@ const Posts = (props) => {
   if (!loading && !err) {
     postView =
       <div>
-        <h1 className="text-success">{data.title}</h1>
-        <p className="text-info">{data.body}</p>
+        <h1 className="text-success">{state.post.title}</h1>
+        <p className="text-info">{state.post.body}</p>
         <Button color="primary" onClick={navigateToComments.bind(this)}>Show Comments</Button>
 
       </div>
