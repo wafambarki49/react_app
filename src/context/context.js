@@ -2,7 +2,9 @@ import React from 'react';
 
 const AppContext = React.createContext({
     post: {},
-    comments: []
+    comments: [],
+    err: false,
+    loading: true
 });
 
 export default AppContext;

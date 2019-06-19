@@ -1,11 +1,9 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button } from 'reactstrap';
 import AppContext from '../../context/context';
 const Posts = (props) => {
 
-  const {state,dispatch} = useContext(AppContext);
-  const [loading, setLoading] = useState(true);
-  const [err, setError] = useState(false);
+  const { state, dispatch } = useContext(AppContext);
 
   const getData = () => {
     const id = Math.floor(Math.random() * 100) + 1;
@@ -17,11 +15,12 @@ const Posts = (props) => {
         return response.json();
       })
       .then(data => {
-        dispatch({type:"GET_POST",payload: data})
-        setError(false);
-        setLoading(false);
+        dispatch({ type: "GET_POST", payload: data })
+        dispatch({ type: "SET_ERROR", payload: false })
+        dispatch({ type: "SET_LOADING", payload: false })
       })
-      .catch(error => setError(true));
+      .catch(error => dispatch({ type: "SET_ERROR", payload: true })
+      );
   }
 
   const navigateToComments = () => {
@@ -37,11 +36,11 @@ const Posts = (props) => {
 
   let postView = <p>please wait while loading....</p>
 
-  if (err) {
+  if (state.err) {
     postView = <p className="text-warning">Something Went Wrong</p>
   }
 
-  if (!loading && !err) {
+  if (!state.loading && !state.err) {
     postView =
       <div>
         <h1 className="text-success">{state.post.title}</h1>

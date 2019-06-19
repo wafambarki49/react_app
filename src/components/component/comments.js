@@ -5,8 +5,7 @@ import {ListGroup,ListGroupItem,ListGroupItemHeading,ListGroupItemText} from 're
 const Comments = (props) =>  {
 
   const {state,dispatch} = useContext(AppContext);
-  const [err,setErr] = useState(false);
-  const [loading,setLoading] = useState(true);
+
 
   const getComments = () => {
     const id = props.match.params.id;
@@ -19,11 +18,11 @@ const Comments = (props) =>  {
       })
       .then(comment => {
         dispatch({type:"GET_COMMENTS",payload: comment})
-        setErr(false)
-        setLoading(false)
+        dispatch({ type: "SET_ERROR", payload: false })
+        dispatch({ type: "SET_LOADING", payload: false })
       })
       .catch(err => {
-        setErr(true)
+        dispatch({ type: "SET_ERROR", payload: true })
       })
   }
 
@@ -35,12 +34,12 @@ const Comments = (props) =>  {
 
     let commentsView = <p>please wait while loading....</p>
 
-    if (err) {
+    if (state.err) {
       commentsView = <p>Something Went Wrong</p>
     }
 
 
-    if (!loading && !err ) {
+    if (!state.loading && !state.err ) {
       commentsView = state.comments.map(hit =>
         <ListGroupItem  key={hit.id}>
           <ListGroupItemHeading className="text-info">Email <span className="text-muted">{hit.email}</span></ListGroupItemHeading>
