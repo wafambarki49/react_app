@@ -17,12 +17,11 @@ const Comments = (props) =>  {
         return response.json();
       })
       .then(comment => {
-        dispatch({type:"GET_COMMENTS",payload: comment})
-        dispatch({ type: "SET_ERROR", payload: false })
-        dispatch({ type: "SET_LOADING", payload: false })
+        const obj = { data: comment, err: false, loading: false}
+        dispatch({type:"GET_COMMENTS",payload: obj})
       })
       .catch(err => {
-        dispatch({ type: "SET_ERROR", payload: true })
+        dispatch({ type: "SET_COMMENT_ERROR", payload: true })
       })
   }
 
@@ -34,12 +33,12 @@ const Comments = (props) =>  {
 
     let commentsView = <p>please wait while loading....</p>
 
-    if (state.err) {
+    if (state.commentErr) {
       commentsView = <p>Something Went Wrong</p>
     }
 
 
-    if (!state.loading && !state.err ) {
+    if (!state.commentloading && !state.commentErr ) {
       commentsView = state.comments.map(hit =>
         <ListGroupItem  key={hit.id}>
           <ListGroupItemHeading className="text-info">Email <span className="text-muted">{hit.email}</span></ListGroupItemHeading>

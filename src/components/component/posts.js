@@ -15,11 +15,11 @@ const Posts = (props) => {
         return response.json();
       })
       .then(data => {
-        dispatch({ type: "GET_POST", payload: data })
-        dispatch({ type: "SET_ERROR", payload: false })
-        dispatch({ type: "SET_LOADING", payload: false })
+        const obj = { data: data, err: false, loading: false}
+
+        dispatch({ type: "GET_POST", payload: obj })
       })
-      .catch(error => dispatch({ type: "SET_ERROR", payload: true })
+      .catch(error => dispatch({ type: "SET_POST_ERROR", payload: true })
       );
   }
 
@@ -36,11 +36,11 @@ const Posts = (props) => {
 
   let postView = <p>please wait while loading....</p>
 
-  if (state.err) {
+  if (state.postErr) {
     postView = <p className="text-warning">Something Went Wrong</p>
   }
 
-  if (!state.loading && !state.err) {
+  if (!state.postloading && !state.postErr) {
     postView =
       <div>
         <h1 className="text-success">{state.post.title}</h1>

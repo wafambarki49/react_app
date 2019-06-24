@@ -3,22 +3,26 @@ export default function reducer(state, action) {
         case "GET_POST":
             return {
                 ...state,
-                post: action.payload
+                post: action.payload.data,
+                postErr: action.payload.err,
+                postloading: action.payload.loading
             }
         case "GET_COMMENTS":
             return {
                 ...state,
-                comments: action.payload
+                comments: action.payload.data,
+                commentErr: action.payload.err,
+                commentloading: action.payload.loading
             }
-        case "SET_ERROR":
+        case "SET_POST_ERROR":
             return {
                 ...state,
-                err: action.payload
+                postErr: action.payload
             }
-        case "SET_LOADING":
+        case "SET_COMMENT_ERROR":
             return {
                 ...state,
-                loading: action.payload
+                commentErr: action.payload
             }
         default:
             return state;
