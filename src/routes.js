@@ -1,13 +1,17 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Posts from "./components/component/posts";
-import Comments from "./components/component/comments";
+
+
+const Posts = React.lazy(() => import('./components/component/posts'));
+const Comments = React.lazy(() => import('./components/component/comments'));
 
 const RoutesApp = () => (
-    <Router>
+  <Router>
     <Switch>
-      <Route path="/" exact component={Posts} />
-      <Route path="/:id/comments" exact component={Comments} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Route path="/" exact component={Posts} />
+        <Route path="/:id/comments" exact component={Comments} />
+      </Suspense>
     </Switch>
   </Router>
 
