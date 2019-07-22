@@ -1,12 +1,7 @@
-import React from 'react';
-
-const AppContext = React.createContext({
+const AppContext = {
     post: {},
     comments: [],
-    postErr: false,
-    commentErr: false,
-    postloading: true,
-    commentloading: true
-});
+    error: false
+};
 
 export default AppContext;

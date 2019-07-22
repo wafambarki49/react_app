@@ -1,61 +1,58 @@
-import React, { useState,useEffect,useContext } from 'react';
-import AppContext from '../../context/context';
-import {ListGroup,ListGroupItem,ListGroupItemHeading,ListGroupItemText} from 'reactstrap';
-
-const Comments = (props) =>  {
-
-  const {state,dispatch} = useContext(AppContext);
+import React, { Component } from 'react';
+import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText } from 'reactstrap';
+import { getAllComments } from '../../context/actions';
+import { connect } from "react-redux";
 
 
-  const getComments = () => {
-    const id = props.match.params.id;
-    fetch('https://jsonplaceholder.typicode.com/comments?postId=' + id)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(comment => {
-        const obj = { data: comment, err: false, loading: false}
-        dispatch({type:"GET_COMMENTS",payload: obj})
-      })
-      .catch(err => {
-        dispatch({ type: "SET_COMMENT_ERROR", payload: true })
-      })
+class Comments extends Component {
+
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    this.props.onGetComments(id);
   }
 
-  useEffect(() => {
-    getComments()
-  },[])
-  
-
+  render() {
 
     let commentsView = <p>please wait while loading....</p>
 
-    if (state.commentErr) {
+    if (this.props.error) {
       commentsView = <p>Something Went Wrong</p>
     }
 
 
-    if (!state.commentloading && !state.commentErr ) {
-      commentsView = state.comments.map(hit =>
-        <ListGroupItem  key={hit.id}>
+    if (!this.props.error) {
+      commentsView = this.props.comments.map(hit =>
+        <ListGroupItem key={hit.id}>
           <ListGroupItemHeading className="text-info">Email <span className="text-muted">{hit.email}</span></ListGroupItemHeading>
           <ListGroupItemText className="text-warning"> {hit.body}</ListGroupItemText>
         </ListGroupItem>
       )
     }
 
-
     return (
       <ListGroup>
-          {commentsView}
+        {commentsView}
       </ListGroup>
+    )
+  }
 
-
-    );
-
-  
 }
-export default Comments;
+
+const mapStateToProps = state => {
+  return {
+    comments: state.comments,
+    error: state.error
+  };
+};
+
+const mapDisptachToProps = dispatch => {
+  return {
+    onGetComments: id => dispatch(getAllComments(id))
+  };
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDisptachToProps
+)(Comments);

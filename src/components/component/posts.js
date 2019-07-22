@@ -1,64 +1,61 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { Component } from 'react';
 import { Button } from 'reactstrap';
-import AppContext from '../../context/context';
-const Posts = (props) => {
+import { getNewPost } from '../../context/actions';
+import { connect } from "react-redux";
 
-  const { state, dispatch } = useContext(AppContext);
+class Posts extends Component {
 
-  const getData = () => {
+  componentDidMount() {
     const id = Math.floor(Math.random() * 100) + 1;
-    fetch('https://jsonplaceholder.typicode.com/posts/' + id)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const obj = { data: data, err: false, loading: false}
-
-        dispatch({ type: "GET_POST", payload: obj })
-      })
-      .catch(error => dispatch({ type: "SET_POST_ERROR", payload: true })
-      );
+    this.props.onGetPost(id);
   }
 
-  const navigateToComments = () => {
-    const id = state.post.id;
-    props.history.push('/' + id + '/comments')
+  navigateToComments = (id) => {
+    this.props.history.push('/' + id + '/comments')
   }
 
-  useEffect(() => {
-    getData();
-  }, {});
 
+  render() {
 
+    let postView = <p>please wait while loading....</p>
 
-  let postView = <p>please wait while loading....</p>
+    if (this.props.error) {
+      postView = <p className="text-warning">Something Went Wrong</p>
+    }
 
-  if (state.postErr) {
-    postView = <p className="text-warning">Something Went Wrong</p>
-  }
+    if (!this.props.error) {
+      postView =
+        <div>
+          <h1 className="text-success">{this.props.post.title}</h1>
+          <p className="text-info">{this.props.post.body}</p>
+          <Button color="primary" onClick={(id) => this.navigateToComments(this.props.post.id)}>Show Comments</Button>
 
-  if (!state.postloading && !state.postErr) {
-    postView =
+        </div>
+    }
+
+    return (
       <div>
-        <h1 className="text-success">{state.post.title}</h1>
-        <p className="text-info">{state.post.body}</p>
-        <Button color="primary" onClick={navigateToComments.bind(this)}>Show Comments</Button>
-
+        {postView}
       </div>
+    );
   }
-
-
-  return (
-    <div>
-      {postView}
-    </div>
-
-
-  );
-
 
 }
-export default Posts;
+
+const mapStateToProps = state => {
+  return {
+    post: state.post,
+    error: state.error
+  };
+};
+
+const mapDisptachToProps = dispatch => {
+  return {
+    onGetPost: id => dispatch(getNewPost(id))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDisptachToProps
+)(Posts);

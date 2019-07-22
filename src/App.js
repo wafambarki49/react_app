@@ -1,20 +1,24 @@
-import React,{ useContext, useReducer} from 'react';
+import React from 'react';
+import {Provider} from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+
 import './App.css';
 import RoutesApp from './routes';
-import AppContext from './context/context';
 import AppReducer from './context/reducer';
+import thunk from "redux-thunk";
+
+
 
 function App() {
 
-  const firstState = useContext(AppContext);
-  const [state,dispatch] = useReducer(AppReducer,firstState);
+  const store = createStore(AppReducer,compose(applyMiddleware(thunk)));
 
   return (
-    <AppContext.Provider value={{ state,dispatch }}>
+    <Provider store={store}>
     <div className="App container">
       <RoutesApp />
     </div>
-    </AppContext.Provider>
+    </Provider>
   );
 }
 
