@@ -1,61 +1,42 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'reactstrap';
 import { getNewPost } from '../../context/actions';
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-class Posts extends Component {
+const Posts = props => {
+  const dispatch = useDispatch();
+  const post = useSelector(state => state.post);
+  const error = useSelector(state => state.error);
 
-  componentDidMount() {
+  const navigateToComments = (id) => {
+    props.history.push('/' + id + '/comments')
+  }
+  useEffect(() => {
     const id = Math.floor(Math.random() * 100) + 1;
-    this.props.onGetPost(id);
+    dispatch(getNewPost(id));
+
+  }, {});
+  let postView = <p>please wait while loading....</p>
+
+  if (error) {
+    postView = <p className="text-warning">Something Went Wrong</p>
   }
 
-  navigateToComments = (id) => {
-    this.props.history.push('/' + id + '/comments')
-  }
-
-
-  render() {
-
-    let postView = <p>please wait while loading....</p>
-
-    if (this.props.error) {
-      postView = <p className="text-warning">Something Went Wrong</p>
-    }
-
-    if (!this.props.error) {
-      postView =
-        <div>
-          <h1 className="text-success">{this.props.post.title}</h1>
-          <p className="text-info">{this.props.post.body}</p>
-          <Button color="primary" onClick={(id) => this.navigateToComments(this.props.post.id)}>Show Comments</Button>
-
-        </div>
-    }
-
-    return (
+  if (!error) {
+    postView =
       <div>
-        {postView}
+        <h1 className="text-success">{post.title}</h1>
+        <p className="text-info">{post.body}</p>
+        <Button color="primary" onClick={(id) => navigateToComments(post.id)}>Show Comments</Button>
+
       </div>
-    );
   }
+  return (<div>{postView}</div>);
+
+
+
+
+
 
 }
-
-const mapStateToProps = state => {
-  return {
-    post: state.post,
-    error: state.error
-  };
-};
-
-const mapDisptachToProps = dispatch => {
-  return {
-    onGetPost: id => dispatch(getNewPost(id))
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDisptachToProps
-)(Posts);
+export default Posts;

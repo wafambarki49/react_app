@@ -1,4 +1,4 @@
-export const GetPost = (post,error) => {
+export const GetPost = (post, error) => {
     return {
         type: 'GET_POST',
         post: post,
@@ -6,13 +6,14 @@ export const GetPost = (post,error) => {
     }
 }
 
-export const GetComments = (comments,error) => {
+export const GetComments = (comments, error) => {
     return {
         type: 'GET_COMMENTS',
         comments: comments,
         error: error
-        }
+    }
 }
+
 
 export const getNewPost = (id) => {
     return function (dispatch) {
@@ -24,9 +25,9 @@ export const getNewPost = (id) => {
                 return response.json();
             })
             .then(post => {
-                dispatch(GetPost(post,false))
+                dispatch(GetPost(post, false))
             })
-            .catch(error => dispatch(GetPost({},true)));
+            .catch(error => dispatch(GetPost({}, true)));
     }
 };
 
@@ -41,13 +42,13 @@ export const getAllComments = (id) => {
             })
             .then(comments => {
                 if (comments) {
-                    dispatch(GetComments(comments,false))
+                    dispatch(GetComments(comments, false))
                 } else {
-                    dispatch(GetComments([],true))
+                    dispatch(GetComments([], true))
                 }
             })
             .catch(error => {
-                dispatch(GetComments([],true))
+                dispatch(GetComments([], true))
             });
     }
 };
