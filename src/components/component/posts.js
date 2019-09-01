@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useCallback } from 'react';
 import { Button } from 'reactstrap';
 import { getNewPost } from '../../context/actions';
 import { useDispatch, useSelector } from "react-redux";
@@ -7,15 +7,15 @@ const Posts = props => {
   const dispatch = useDispatch();
   const post = useSelector(state => state.post);
   const error = useSelector(state => state.error);
+  const id = Math.floor(Math.random() * 100) + 1;
 
-  const navigateToComments = (id) => {
+  const navigateToComments = useCallback((id) => {
     props.history.push('/' + id + '/comments')
-  }
-  useEffect(() => {
-    const id = Math.floor(Math.random() * 100) + 1;
-    dispatch(getNewPost(id));
+  },[props.history])
 
-  }, {});
+  useEffect(() => {
+    dispatch(getNewPost(id));
+  }, [dispatch]);
   let postView = <p>please wait while loading....</p>
 
   if (error) {

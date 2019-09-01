@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 const Comments = props => {
   const dispatch = useDispatch();
   const comments = useSelector(state => state.comments);
+  const { id } = props.match.params;
 
   const error = useSelector(state => state.error);
   useEffect(() => {
-    const id = props.match.params.id;
     dispatch(getAllComments(id));
 
-  }, []);
+  }, [dispatch,id]);
   let commentsView = <p>please wait while loading....</p>
 
   if (error) {
